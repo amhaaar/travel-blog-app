@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+
+<h2>Welcome, <%= email %>!</h2>
+
+<% if (apiKey) { %>
+  <p>Your API Key:</p>
+  <textarea readonly style="width: 100%; max-width: 500px; padding: 10px; border-radius: 6px; border: 1px solid #ccc;"><%= apiKey %></textarea>
+<% } else { %>
+  <form method="POST" action="/admin/api-keys" style="margin-top: 20px;">
+    <button type="submit">Generate API Key</button>
+  </form>
+<% } %>
+
+<div style="margin-top: 30px;">
+  <a href="/admin/countries" class="nav-link" style="color: blue;">🌍 Go to Countries Page</a>
+</div>
+
+<div style="margin-top: 20px;">
+  <a href="/auth/logout" class="nav-link" style="color: #e74c3c;">🚪 Logout</a>
+</div>
+
+<%- include('partials/footer') %>
