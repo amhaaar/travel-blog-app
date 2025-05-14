@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Blog Post</title>
+    <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+    <div class="container">
+        <h1>Edit Blog</h1>
+        <form method="POST" action="/blogs/<%= blog.id %>/edit">
+            <input type="text" name="title" value="<%= blog.title %>" required>
+            <textarea name="content" rows="6" required><%= blog.content %></textarea>
+
+            <label for="country">Country:</label>
+            <select name="country">
+                <% countries.forEach(c=> { %>
+                    <option value="<%= c.name %>" <%=blog.country===c.name ? 'selected' : '' %>><%= c.name %>
+                    </option>
+                    <% }) %>
+            </select>
+
+            <button type="submit">Update</button>
+        </form>
+        <a href="/">Cancel</a>
+    </div>
+</body>
+
+</html>

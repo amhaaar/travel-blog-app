@@ -1,0 +1,48 @@
+const express = require('express');
+const router = express.Router();
+const authService = require('../services/authService');
+
+// Register form
+router.get('/register', (req, res) => {
+  res.render('register', { error: null });
+});
+
+router.post('/register', async (req, res) => {
+  try {
+    const success = await authService.register(req.body);
+    if (success) {
+      const user = await authService.login(req.body);
+      req.session.user = { id: user.id, email: user.email };
+      res.redirect('/'); 
+    } else {
+      res.render('register', { error: 'Email already exists' });
+    }
+  } catch (err) {
+    res.render('register', { error: 'Error registering user' });
+  }
+});
+
+
+// Login form
+router.get('/login', (req, res) => {
+  res.render('login', { error: null });
+});
+
+router.post('/login', async (req, res) => {
+  const user = await authService.login(req.body);
+  if (user) {
+    req.session.user = { id: user.id, email: user.email };
+    res.redirect('/');
+  } else {
+    res.render('login', { error: 'Invalid credentials' });
+  }
+});
+
+// Logout
+router.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/auth/login');
+  });
+});
+
+module.exports = router;

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>New Blog Post</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <% if (user) { %>
+      <a href="/">Home</a>
+      <a href="/auth/logout">Logout</a>
+    <% } else { %>
+      <a href="/auth/login">Login</a>
+      <a href="/auth/register">Register</a>
+    <% } %>
+  </nav>
+
+  <div class="container">
+    <h1>Create a Blog Post</h1>
+
+    <form action="/blogs/new" method="POST" class="blog-form">
+      <input type="text" name="title" placeholder="Title" required><br><br>
+
+      <textarea name="content" rows="6" placeholder="Content" required></textarea><br><br>
+
+      <% if (!user) { %>
+        <!-- fallback if user object is missing -->
+        <input type="text" name="author" placeholder="Author" required><br><br>
+      <% } %>
+
+      <label for="country">Country:</label><br>
+      <select name="country" required>
+        <% countries.forEach(c => { %>
+          <option value="<%= c.name %>"><%= c.name %></option>
+        <% }) %>
+      </select><br><br>
+
+      <button type="submit">Publish</button>
+    </form>
+
+    <br>
+    <a href="/"><button class="btn">Back to Blog</button></a>
+  </div>
+
+</body>
+</html>

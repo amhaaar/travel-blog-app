@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Travel Blog</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <nav>
+    <% if (user) { %>
+      <a href="/new">Write Blog</a>
+      <a href="/blogs/my-blogs">My Blogs</a>
+      <a href="/auth/logout">Logout</a>
+    <% } else { %>
+      <a href="/auth/login">Login</a>
+      <a href="/auth/register">Register</a>
+    <% } %>
+  </nav>
+
+  <div class="container">
+    <h1>All Blog Posts</h1>
+
+    <form method="GET" action="/">
+      <label for="country">Filter by Country:</label>
+      <select name="country" id="country" onchange="this.form.submit()">
+        <option value="">All</option>
+        <% countries.forEach(c => { %>
+          <option value="<%= c.name %>" <%= selectedCountry === c.name ? 'selected' : '' %>><%= c.name %></option>
+        <% }) %>
+      </select>
+    </form>
+
+    <% if (blogs.length > 0) { %>
+      <% blogs.forEach(blog => { %>
+        <div class="blog-card">
+          <h3><%= blog.title %></h3>
+          <small><strong>Country:</strong> <%= blog.country %></small>
+          <p><%= blog.content %></p>
+
+          <% if (user && user.id === blog.user_id) { %>
+            <div style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px; display: flex; gap: 15px;">
+              <a href="/blogs/<%= blog.id %>/edit" style="color: #007bff; margin-top: 15px; text-decoration: none;">Edit</a>
+              <form action="/blogs/<%= blog.id %>/delete" method="POST" style="display: inline;">
+                <button type="submit" onclick="return confirm('Are you sure?')" style="background: none; border: none; color: red; cursor: pointer;">Delete</button>
+              </form>
+            </div>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No blogs found for this country.</p>
+    <% } %>
+
+    <a href="/new"><button>Write a New Blog Post</button></a>
+  </div>
+</body>
+</html>
